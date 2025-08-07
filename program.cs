@@ -35,17 +35,30 @@ class Program
             description: "Minimum word count threshold (default: 10)",
             getDefaultValue: () => 10);
 
+        var chartOption = new Option<string>(
+            name: "--chart",
+            description: "Chart type for HTML output: bar, pie, or line (default: bar)",
+            getDefaultValue: () => "bar");
+
+        var outputFileOption = new Option<string?>(
+            name: "--output-file",
+            description: "Output file path (.txt, .json, .md, .yaml). If not specified, shows HTML in browser");
+
         thresholdOption.AddAlias("-t");
+        chartOption.AddAlias("-c");
+        outputFileOption.AddAlias("-o");
 
         // Add arguments and options to the command
         rootCommand.AddArgument(filePathArgument);
         rootCommand.AddOption(thresholdOption);
+        rootCommand.AddOption(chartOption);
+        rootCommand.AddOption(outputFileOption);
 
         // Set the handler for the command
-        rootCommand.SetHandler(async (string filePath, int minCountThreshold) =>
+        rootCommand.SetHandler(async (string filePath, int minCountThreshold, string chartType, string? outputFile) =>
         {
-            await AnalyzeTranscript(filePath, minCountThreshold);
-        }, filePathArgument, thresholdOption);
+            await AnalyzeTranscript(filePath, minCountThreshold, chartType, outputFile);
+        }, filePathArgument, thresholdOption, chartOption, outputFileOption);
 
         // Execute the command
         return await rootCommand.InvokeAsync(args);
@@ -56,12 +69,22 @@ class Program
     /// </summary>
     /// <param name="pathToScriptTextFile">Path to the transcript text file</param>
     /// <param name="minCountThreshold">Minimum count threshold for word inclusion</param>
-    private static async Task AnalyzeTranscript(string pathToScriptTextFile, int minCountThreshold = 10)
+    /// <param name="chartType">Type of chart to display (bar, pie, line)</param>
+    /// <param name="outputFile">Optional output file path for saving results</param>
+    private static async Task AnalyzeTranscript(string pathToScriptTextFile, int minCountThreshold = 10, string chartType = "bar", string? outputFile = null)
     {
         try
         {
             Console.WriteLine($"🔍 Analyzing transcript: {pathToScriptTextFile}");
             Console.WriteLine($"📊 Minimum count threshold: {minCountThreshold}");
+            if (!string.IsNullOrEmpty(outputFile))
+            {
+                Console.WriteLine($"📁 Output file: {outputFile}");
+            }
+            else
+            {
+                Console.WriteLine($"📊 Chart type: {chartType}");
+            }
             Console.WriteLine();
 
             // Read the file content
@@ -71,47 +94,54 @@ class Program
             Console.WriteLine("⚙️  Counting words...");
             var wordCounts = WordCounter.CountWords(pathToScriptTextFile, minCountThreshold);
 
-            // Display word frequency results
-            Console.WriteLine();
-            Console.WriteLine("📈 WORD FREQUENCY ANALYSIS");
-            Console.WriteLine("================================");
-            
-            if (wordCounts.Any())
-            {
-                foreach (var kvp in wordCounts)
-                {
-                    Console.WriteLine($"{kvp.Key}: {kvp.Value}");
-                }
-            }
-            else
-            {
-                Console.WriteLine("No words found above the minimum threshold.");
-            }
-
             // Run LLM analysis
             Console.WriteLine();
             Console.WriteLine("🤖 Running AI analysis...");
             var analysis = await LLMAnalyzer.AnalyzeTranscript(transcriptContent, wordCounts);
 
-            // Display LLM analysis results
-            Console.WriteLine();
-            Console.WriteLine("🧠 AI TRANSCRIPT ANALYSIS");
-            Console.WriteLine("==========================");
-            
-            Console.WriteLine();
-            Console.WriteLine("📝 SUMMARY:");
-            Console.WriteLine(analysis.Summary);
-            
-            Console.WriteLine();
-            Console.WriteLine("🔑 IMPORTANT WORDS:");
-            foreach (var word in analysis.ImportantWords)
+            // Handle output based on options
+            if (!string.IsNullOrEmpty(outputFile))
             {
-                Console.WriteLine($"• {word}");
+                // Save to file
+                Console.WriteLine($"💾 Saving results to {outputFile}...");
+                await FileOutput.WriteToFileAsync(analysis, wordCounts, outputFile);
+                Console.WriteLine("✅ File saved successfully!");
+                
+                // Also display summary in console
+                Console.WriteLine();
+                Console.WriteLine("📊 SUMMARY:");
+                Console.WriteLine($"Total Words: {wordCounts.Values.Sum():N0}");
+                Console.WriteLine($"Unique Words: {wordCounts.Count:N0}");
+                Console.WriteLine($"Analysis saved to: {outputFile}");
             }
-            
-            Console.WriteLine();
-            Console.WriteLine("😊 SENTIMENT ANALYSIS:");
-            Console.WriteLine(analysis.SentimentAnalysis);
+            else
+            {
+                // Generate and save HTML report, then open in browser
+                Console.WriteLine($"🌐 Generating HTML report with {chartType} chart...");
+                string htmlContent = HtmlGenerator.GenerateHtmlReport(analysis, wordCounts, chartType);
+                
+                // Save to temporary HTML file
+                string tempFile = Path.Combine(Path.GetTempPath(), "transcript_analysis_report.html");
+                await File.WriteAllTextAsync(tempFile, htmlContent);
+                
+                Console.WriteLine($"📄 HTML report generated: {tempFile}");
+                
+                // Try to open in default browser
+                try
+                {
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = tempFile,
+                        UseShellExecute = true
+                    });
+                    Console.WriteLine("🌍 Opening report in your default browser...");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"⚠️  Could not open browser automatically: {ex.Message}");
+                    Console.WriteLine($"📁 Please open this file manually: {tempFile}");
+                }
+            }
 
             Console.WriteLine();
             Console.WriteLine("✅ Analysis complete!");

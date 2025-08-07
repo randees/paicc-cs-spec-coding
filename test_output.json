@@ -1,0 +1,48 @@
+﻿{
+  "Analysis": {
+    "Summary": "The transcript discusses the use of OpenAI\u0027s Real Time API and its capabilities to create AI experiences. The speaker demonstrates the use of AI assistant, Ada, to perform various tasks such as opening various tools and blogs, generating a random number, and manipulating a CSV file. The speaker also discusses the potential of AI agents and the future of technology.",
+    "ImportantWords": [
+      "OpenAI",
+      "Real Time API",
+      "AI assistant",
+      "Ada",
+      "AI agents",
+      "CSV file",
+      "technology",
+      "future"
+    ],
+    "SentimentAnalysis": "The overall tone of the transcript is positive and enthusiastic about the capabilities and future of AI technology."
+  },
+  "WordCounts": {
+    "file": 35,
+    "ahead": 24,
+    "here": 22,
+    "time": 20,
+    "what": 20,
+    "really": 20,
+    "just": 17,
+    "real": 16,
+    "then": 16,
+    "have": 16,
+    "open": 15,
+    "these": 15,
+    "right": 15,
+    "speech": 14,
+    "loops": 14,
+    "been": 13,
+    "about": 13,
+    "api": 12,
+    "python": 12,
+    "delete": 12,
+    "want": 12,
+    "ada": 11,
+    "there": 11,
+    "next": 10,
+    "going": 10,
+    "assistant": 10,
+    "some": 10
+  },
+  "GeneratedAt": "2025-08-07T16:59:11Z",
+  "TotalWords": 415,
+  "UniqueWords": 27
+}
