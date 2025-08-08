@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transcript Analytics Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        h1 {
+            color: #0f172a;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+            font-weight: 700;
+        }
+        
+        h2 {
+            color: #334155;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 10px;
+        }
+        
+        .timestamp {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 30px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card h3 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        
+        .stat-card p {
+            margin: 5px 0 0 0;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .word-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .word-tag {
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 500px;
+            margin-top: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        p {
+            color: #475569;
+            margin: 10px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-container {
+                height: 400px;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ðŸ“Š Transcript Analytics Report</h1>
+        <p class="timestamp">Generated: 2025-08-07 23:25:44 UTC</p>
+        <div class="stats-grid">
+            <div class="stat-card"><h3>415</h3><p>Total Words</p></div>
+            <div class="stat-card"><h3>27</h3><p>Unique Words</p></div>
+            <div class="stat-card"><h3>10</h3><p>Top Words</p></div>
+        </div>
+        <div class="section">
+            <h2>ðŸ¤– AI Analysis</h2>
+            <p>The transcript is a conversation between two individuals, Ada and Dan, discussing the capabilities of OpenAI's Real Time API. They explore the potential of this technology in building next-generation AI experiences, specifically AI assistants powered by advanced reasoning models. They demonstrate the use of AI in performing complex tasks such as opening multiple applications, generating random numbers, and manipulating data in a CSV file. The conversation emphasizes the potential of AI in simplifying tasks and bridging the gap between thoughts and actions on a device.<br><br>Key Words: OpenAI, Real Time API, AI assistants, advanced reasoning models, ChatGPT, Claude, Gemini, Simon W's blog, Hacker News, AI agents, structured output calls, digital assistant, Python application, CSV file, user analytics, mock data, membership, premium<br><br>Sentiment: The overall sentiment of the transcript is positive and enthusiastic. The speakers express excitement about the capabilities of AI and its potential in revolutionizing the way we interact with our devices. They also show satisfaction with the successful execution of tasks by the AI.</p>
+        </div>
+        <div class="section">
+            <h2>ðŸ“ˆ Word Frequency Chart</h2>
+            <div class="chart-container">
+                <canvas id="wordChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <script>
+const ctx = document.getElementById('wordChart').getContext('2d');
+const wordChart = new Chart(ctx, {
+    type: 'radial',
+    data: {
+        labels: ['file', 'ahead', 'here', 'time', 'what', 'really', 'just', 'real', 'then', 'have', 'open', 'these', 'right', 'speech', 'loops', 'been', 'about', 'api', 'python', 'delete'],
+        datasets: [{
+            label: 'Word Count',
+            data: [35, 24, 22, 20, 20, 20, 17, 16, 16, 16, 15, 15, 15, 14, 14, 13, 13, 12, 12, 12],
+            backgroundColor: ['#22c55e', '#22c55e', '#22c55e', '#22c55e', '#22c55e', '#22c55e', '#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6', '#ef4444', '#ef4444', '#ef4444', '#ef4444', '#ef4444'],
+            borderColor: ['#22c55e', '#22c55e', '#22c55e', '#22c55e', '#22c55e', '#22c55e', '#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6', '#3b82f6', '#ef4444', '#ef4444', '#ef4444', '#ef4444', '#ef4444'],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: 'Top 20 Words - RADIAL Chart'
+            },
+            legend: {
+                display: false
+            }
+        }
+    }
+});
+
+    </script>
+</body>
+</html>

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using DotNetEnv;
 
 namespace TranscriptAnalytics;
 
@@ -18,7 +19,7 @@ public static class EnvironmentConfig
             // Load from .env file if it exists
             if (File.Exists(".env"))
             {
-                DotNetEnv.Env.Load(".env");
+                Env.Load(".env");
             }
         }
         catch (Exception ex)

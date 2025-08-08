@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Interactive Transcript Analysis - Default Theme</title>
+    <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+    <style>
+        
+        :root {
+            --primary-color: #3b82f6;
+            --secondary-color: #6b7280;
+            --background-color: #1f2937;
+            --text-color: #f9fafb;
+            --accent-color: #fbbf24;
+            --chart-colors: #60a5fa, #f87171, #34d399, #fbbf24, #a78bfa;
+        }
+        
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .section {
+            background: var(--background-color);
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .chart-colors {
+            --chart-color-1: #60a5fa;
+            --chart-color-2: #f87171;
+            --chart-color-3: #34d399;
+            --chart-color-4: #fbbf24;
+            --chart-color-5: #a78bfa;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .controls {
+            background: var(--background-color);
+            border: 1px solid var(--secondary-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .slider {
+            flex: 1;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--secondary-color);
+            outline: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        
+        .slider:hover {
+            opacity: 1;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: var(--background-color);
+            border: 1px solid var(--secondary-color);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 500px;
+            margin: 2rem 0;
+        }
+        
+        .word-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 0.5rem;
+            margin-top: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .word-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem;
+            background: var(--background-color);
+            border: 1px solid var(--secondary-color);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h1>📊 Interactive Transcript Analysis</h1>
+            <p>Theme: Default | Chart Type: BAR | Total Words: 415</p>
+        </div>
+        
+        <div class='controls'>
+            <h3>🎛️ Filter Controls</h3>
+            <div class='slider-container'>
+                <label>Min Frequency:</label>
+                <input type='range' id='minFrequency' class='slider' 
+                       min='10' max='35' value='10' 
+                       oninput='updateChart()'>
+                <span id='minValue'>10</span>
+            </div>
+            <div class='slider-container'>
+                <label>Max Words:</label>
+                <input type='range' id='maxWords' class='slider' 
+                       min='5' max='50' value='20' 
+                       oninput='updateChart()'>
+                <span id='maxWordsValue'>20</span>
+            </div>
+        </div>
+        
+        <div class='stats-grid'>
+            <div class='stat-card'>
+                <div class='stat-number' id='totalWords'>415</div>
+                <div>Total Words</div>
+            </div>
+            <div class='stat-card'>
+                <div class='stat-number' id='uniqueWords'>27</div>
+                <div>Unique Words</div>
+            </div>
+            <div class='stat-card'>
+                <div class='stat-number' id='displayedWords'>20</div>
+                <div>Displayed Words</div>
+            </div>
+            <div class='stat-card'>
+                <div class='stat-number' id='avgFrequency'>15.4</div>
+                <div>Avg Frequency</div>
+            </div>
+        </div>
+        
+        <div class='section'>
+            <h2>🎯 AI Analysis</h2>
+            <div>The transcript discusses the capabilities of OpenAI's Real Time API and its potential to revolutionize human-computer interaction. The speaker demonstrates the use of AI assistant 'Ada' to perform various tasks such as opening different tools, generating a random number, telling the current time, and manipulating a CSV file. The speaker also emphasizes the potential of AI agents and the future possibilities of this technology.<br><br>Key Words: OpenAI, Real Time API, AI assistant, Ada, AI agents, CSV file, user analytics, file manipulation, technology<br><br>Sentiment: The overall tone of the transcript is positive and enthusiastic, with the speaker expressing excitement about the capabilities and future potential of OpenAI's Real Time API and AI technology.</div>
+        </div>
+        
+        <div class='section chart-colors'>
+            <h2>📈 Interactive Word Frequency Visualization</h2>
+            <div class='chart-container'>
+                <canvas id='wordChart'></canvas>
+            </div>
+            <div class='word-list' id='wordList'></div>
+        </div>
+        
+        <script>
+            // Word data for filtering
+            const allWordData = [{"word":"file","count":35},{"word":"ahead","count":24},{"word":"here","count":22},{"word":"time","count":20},{"word":"what","count":20},{"word":"really","count":20},{"word":"just","count":17},{"word":"real","count":16},{"word":"then","count":16},{"word":"have","count":16},{"word":"open","count":15},{"word":"these","count":15},{"word":"right","count":15},{"word":"speech","count":14},{"word":"loops","count":14},{"word":"been","count":13},{"word":"about","count":13},{"word":"api","count":12},{"word":"python","count":12},{"word":"delete","count":12},{"word":"want","count":12},{"word":"ada","count":11},{"word":"there","count":11},{"word":"next","count":10},{"word":"going","count":10},{"word":"assistant","count":10},{"word":"some","count":10}];
+            let currentChart = null;
+            
+            
+        function createStandardChart(data) {
+            const ctx = document.getElementById('wordChart').getContext('2d');
+            return new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: data.map(item => item.word),
+                    datasets: [{
+                        label: 'Word Frequency',
+                        data: data.map(item => item.count),
+                        backgroundColor: [
+                            'var(--chart-color-1)',
+                            'var(--chart-color-2)',
+                            'var(--chart-color-3)',
+                            'var(--chart-color-4)',
+                            'var(--chart-color-5)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: `Word Frequency - ${'bar'.charAt(0).toUpperCase() + 'bar'.slice(1)} Chart`
+                        }
+                    }
+                }
+            };
+        }
+            
+            function updateChart() {
+                const minFreq = parseInt(document.getElementById('minFrequency').value);
+                const maxWords = parseInt(document.getElementById('maxWords').value);
+                
+                // Update display values
+                document.getElementById('minValue').textContent = minFreq;
+                document.getElementById('maxWordsValue').textContent = maxWords;
+                
+                // Filter data
+                const filteredData = allWordData
+                    .filter(item => item.count >= minFreq)
+                    .slice(0, maxWords);
+                
+                // Update stats
+                document.getElementById('displayedWords').textContent = filteredData.length;
+                
+                // Update chart
+                if (currentChart) {
+                    currentChart.destroy();
+                }
+                
+                currentChart = createStandardChart(filteredData);
+                
+                // Update word list
+                updateWordList(filteredData);
+            }
+            
+            function updateWordList(data) {
+                const wordList = document.getElementById('wordList');
+                wordList.innerHTML = data.map(item => 
+                    `<div class='word-item'>
+                        <span>${item.word}</span>
+                        <strong>${item.count}</strong>
+                    </div>`
+                ).join('');
+            }
+            
+            // Initialize chart
+            updateChart();
+        </script>
+    </div>
+</body>
+</html>

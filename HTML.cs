@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,11 +13,11 @@ public static class HtmlGenerator
     /// <summary>
     /// Generates a complete HTML page with analysis results and charts
     /// </summary>
-    /// <param name="analysis">The transcript analysis results</param>
+    /// <param name="analysis">The transcript analysis results as string</param>
     /// <param name="wordCounts">Dictionary of word counts</param>
     /// <param name="chartType">Type of chart to display (bar, pie, line)</param>
     /// <returns>Complete HTML page as string</returns>
-    public static string GenerateHtmlReport(TranscriptAnalysis analysis, Dictionary<string, int> wordCounts, string chartType = "bar")
+    public static string GenerateHtmlReport(string analysis, Dictionary<string, int> wordCounts, string chartType = "bar")
     {
         var sb = new StringBuilder();
         
@@ -37,40 +37,25 @@ public static class HtmlGenerator
         
         // Header
         sb.AppendLine("    <div class=\"container\">");
-        sb.AppendLine("        <h1>📊 Transcript Analytics Report</h1>");
+        sb.AppendLine("        <h1>ðŸ“Š Transcript Analytics Report</h1>");
         sb.AppendLine($"        <p class=\"timestamp\">Generated: {DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} UTC</p>");
         
         // Statistics Summary
         sb.AppendLine("        <div class=\"stats-grid\">");
         sb.AppendLine($"            <div class=\"stat-card\"><h3>{wordCounts.Values.Sum():N0}</h3><p>Total Words</p></div>");
         sb.AppendLine($"            <div class=\"stat-card\"><h3>{wordCounts.Count:N0}</h3><p>Unique Words</p></div>");
-        sb.AppendLine($"            <div class=\"stat-card\"><h3>{analysis.ImportantWords.Count}</h3><p>Key Terms</p></div>");
+        sb.AppendLine($"            <div class=\"stat-card\"><h3>{wordCounts.Take(10).Count()}</h3><p>Top Words</p></div>");
         sb.AppendLine("        </div>");
         
-        // Analysis Sections
+        // Analysis Section
         sb.AppendLine("        <div class=\"section\">");
-        sb.AppendLine("            <h2>📝 Summary</h2>");
-        sb.AppendLine($"            <p>{analysis.Summary}</p>");
-        sb.AppendLine("        </div>");
-        
-        sb.AppendLine("        <div class=\"section\">");
-        sb.AppendLine("            <h2>🔑 Important Words</h2>");
-        sb.AppendLine("            <div class=\"word-tags\">");
-        foreach (var word in analysis.ImportantWords)
-        {
-            sb.AppendLine($"                <span class=\"word-tag\">{word}</span>");
-        }
-        sb.AppendLine("            </div>");
-        sb.AppendLine("        </div>");
-        
-        sb.AppendLine("        <div class=\"section\">");
-        sb.AppendLine("            <h2>😊 Sentiment Analysis</h2>");
-        sb.AppendLine($"            <p>{analysis.SentimentAnalysis}</p>");
+        sb.AppendLine("            <h2>ðŸ¤– AI Analysis</h2>");
+        sb.AppendLine($"            <p>{analysis.Replace("\n", "<br>")}</p>");
         sb.AppendLine("        </div>");
         
         // Chart Section
         sb.AppendLine("        <div class=\"section\">");
-        sb.AppendLine("            <h2>📈 Word Frequency Chart</h2>");
+        sb.AppendLine("            <h2>ðŸ“ˆ Word Frequency Chart</h2>");
         sb.AppendLine("            <div class=\"chart-container\">");
         sb.AppendLine("                <canvas id=\"wordChart\"></canvas>");
         sb.AppendLine("            </div>");
